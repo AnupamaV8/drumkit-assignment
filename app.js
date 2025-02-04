@@ -1,86 +1,99 @@
 const container = document.querySelector("#container");
-console.log(container);
+const drumImage = document.querySelector("#drumImage");
 
 const drumMap = {
   kick: {
-    key: "q",
+    key: "Q",
     sound: "./sounds/kick.wav",
-    position: { top: "60%", left: "53%" },
+    position: { top: 42, left: 62 },
   },
   snare: {
-    key: "w",
+    key: "W",
     sound: "./sounds/snare.wav",
-    position: { top: "42%", left: "54%" },
+    position: { top: 27, left: 65 },
   },
   hihat: {
-    key: "e",
+    key: "E",
     sound: "./sounds/hihat.wav",
-    position: { top: "17%", left: "56%" },
+    position: { top: 13, left: 70 },
   },
-  tom: {
-    key: "r",
-    sound: "./sounds/tom.wav",
-    position: { top: "25%", left: "50%" },
-  },
+  tom: { key: "R", sound: "./sounds/tom.wav", position: { top: 19, left: 56 } },
   tink: {
-    key: "t",
+    key: "T",
     sound: "./sounds/tink.wav",
-    position: { top: "42%", left: "44%" },
+    position: { top: 30, left: 40 },
   },
   ride: {
-    key: "y",
+    key: "Y",
     sound: "./sounds/ride.wav",
-    position: { top: "15%", left: "40%" },
+    position: { top: 12, left: 30 },
   },
   openhat: {
-    key: "u",
+    key: "U",
     sound: "./sounds/openhat.wav",
-    position: { top: "29%", left: "57%" },
+    position: { top: 20, left: 71 },
   },
   clap: {
-    key: "i",
+    key: "I",
     sound: "./sounds/clap.wav",
-    position: { top: "22%", left: "44%" },
+    position: { top: 15, left: 40 },
   },
 };
 
-// Add the drum kit image to the container
-const image = document.createElement("img");
-image.src = `images/drum-kit2.jpg`;
-image.style.height = "600px";
-image.style.width = "600px";
-image.style.position = "relative"; // Ensure it aligns with absolutely positioned buttons
-image.style.right = 50 % container.appendChild(image);
+let drumButtons = [];
 
-for (const drum in drumMap) {
-  const drumButton = document.createElement("div");
-  drumButton.classList.add("drum-button");
+function createDrumButtons() {
+  drumButtons.forEach((button) => button.remove());
+  drumButtons = [];
 
-  // Apply position styles
-  drumButton.style.position = "absolute";
-  drumButton.style.top = drumMap[drum].position.top;
-  drumButton.style.left = drumMap[drum].position.left;
-  drumButton.style.width = "50px";
-  drumButton.style.height = "50px";
-  drumButton.style.borderRadius = "50%";
-  drumButton.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-  drumButton.style.cursor = "pointer";
+  for (const drum in drumMap) {
+    const drumButton = document.createElement("div");
+    drumButton.classList.add("drum-button");
+    drumButton.textContent = drumMap[drum].key;
 
-  // Play sound on click
-  drumButton.addEventListener("click", () => {
-    const audio = new Audio(drumMap[drum].sound);
-    audio.play();
-    console.log(`Playing ${drum} sound`);
-  });
+    drumButton.style.position = "absolute";
+    drumButton.style.top = `${drumMap[drum].position.top}%`;
+    drumButton.style.left = `${drumMap[drum].position.left}%`;
 
-  // Play sound on keydown
-  window.addEventListener("keydown", (e) => {
-    if (e.key === drumMap[drum].key) {
+    drumButton.addEventListener("click", () => {
       const audio = new Audio(drumMap[drum].sound);
       audio.play();
-      console.log(`Playing ${drum} sound with key "${e.key}"`);
-    }
-  });
+      console.log(`Playing ${drum} sound`);
+    });
 
-  container.appendChild(drumButton);
+    window.addEventListener("keydown", (e) => {
+      if (e.key.toUpperCase() === drumMap[drum].key) {
+        const audio = new Audio(drumMap[drum].sound);
+        audio.play();
+        console.log(`Playing ${drum} sound with key "${e.key}"`);
+      }
+    });
+
+    container.appendChild(drumButton);
+    drumButtons.push(drumButton);
+  }
 }
+
+function updateButtonPositions() {
+  drumButtons.forEach((button) => {
+    const buttonIndex = drumButtons.indexOf(button);
+    const drum = Object.keys(drumMap)[buttonIndex];
+    const drumData = drumMap[drum];
+
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+
+    const newTop = (drumData.position.top / 100) * containerHeight;
+    const newLeft = (drumData.position.left / 100) * containerWidth;
+
+    button.style.top = `${newTop}px`;
+    button.style.left = `${newLeft}px`;
+  });
+}
+
+window.onload = () => {
+  createDrumButtons();
+  updateButtonPositions();
+};
+
+window.onresize = updateButtonPositions;

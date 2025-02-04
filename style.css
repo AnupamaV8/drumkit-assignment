@@ -5,40 +5,53 @@
 body {
   margin: 10px;
   padding: 10px;
-  background-color: #ffa21f;
+  background-color: rgb(235, 183, 118, 100%);
 }
 h1 {
   text-align: center;
   color: #ffffff;
   text-shadow: whitesmoke;
 }
+
 #container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  width: 600px;
+  height: 600px;
+  margin: auto;
 }
 
-#drum-kit {
-  width: 500px;
+#drumImage {
+  width: 100%;
   height: auto;
-  justify-content: center;
+  display: block;
 }
+
 .drum-button {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent overlay */
-  border-radius: 50%;
   width: 50px;
   height: 50px;
-  cursor: pointer;
-  font-size: 2rem;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transform: translate(-50%, -50%); /* Centers the button */
 }
 
-.drum-button:hover {
-  background-color: rgba(255, 255, 255, 0.8);
+@media (max-width: 768px) and (min-width: 380px) {
+  #container {
+    width: 90%;
+    height: auto;
+  }
+
+  .drum-button {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
 }
